@@ -60,3 +60,12 @@ export const courseDetails = [
     price: "Rs. 31,000",
   },
 ];
+
+export const currenteducation = [
+  { id: 1, label: "Current Education" },
+  { id: 2, label: "MD/MS/DNB" },
+  { id: 3, label: "NEET SS" },
+  { id: 4, label: "MBBS" },
+  { id: 5, label: "Dental" },
+  { id: 6, label: "School" },
+];

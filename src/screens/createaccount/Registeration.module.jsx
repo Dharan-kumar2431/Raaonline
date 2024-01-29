@@ -1,59 +1,109 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-    header: {
-        height: 130,
-        justifyContent: "flex-end",
-        //   alignItems: 'center',
-      },
-      goBack: {
-        color: "white",
-        paddingBottom: 30,
-        paddingHorizontal: 10,
-        marginTop: 3
-      },
-      registerationheading:{
-        fontSize:20,
-        fontWeight:"500",
-        color:"#262673",
-        textAlign:"center",
-        marginVertical: 40
-      },
-      input: {
-        height: 50,
-        borderColor: "gray",
-        borderWidth: 1,
-        borderRadius: 5,
-        width:"80%",
-        paddingLeft:10,
-        fontWeight:"500",
-        marginBottom:13
-      },
-      section: {
-        flexDirection: 'row',
-        alignItems: 'center',
-      },
-      checkbox: {
-        margin: 8,
-        borderColor:"#262673"
-      },
-      checkboxtext:{
-        color:"#262673",
-      },
-      button: {
-        backgroundColor: 'lightblue',
-        padding: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-        width:"50%",
-        alignItems:"center"
-      },
-      activeButton: {
-        backgroundColor: 'blue',
-      },
-      inactiveButton: {
-        backgroundColor: 'lightgray',
-      },  
-})
+  header: {
+    height: 100,
+    justifyContent: "flex-end",
+    //   alignItems: 'center',
+  },
+  goBack: {
+    color: "white",
+    paddingBottom: 30,
+    paddingHorizontal: 10,
+    marginTop: 3,
+  },
+  registrationHeading: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#262673",
+    // textAlign: "center",
+    marginHorizontal:40,
+    marginVertical: 20,
+  },
+  input: {
+    height: 50,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: "80%",
+    paddingLeft: 10,
+    fontWeight: "500",
+    marginBottom: 5,
+    marginVertical: 10,
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: "#262673",
+  },
+  section: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  checkbox: {
+    margin: 8,
+    borderColor: "#262673",
+  },
+  checkboxtext: {
+    color: "#262673",
+  },
+  button: {
+    // backgroundColor: "lightblue",
+    padding: 12,
+    borderRadius: 5,
+    alignItems: "center",
+    marginLeft:10,
+    alignItems: "center",
+    width:"50%",
+    height:45
+  },
+  activeButton: {
+    backgroundColor: "lightblue",
+  },
+  inactiveButton: {
+    backgroundColor: "lightgray",
+  },
+  checkboxText:{
+    color:"#262673",
+    fontSize:12
+  }
+  // dropdownContainer: {
+  //   position: "relative",
+  //   width: 300,
+  // },
 
-export default styles
+  // dropdown: {
+  //   margin: 16,
+  //   height: 50,
+  //   borderBottomColor: "gray",
+  //   borderBottomWidth: 0.5,
+  //   width: 70,
+  //   borderWidth: 1,
+  //   position: "absolute",
+  //   top: 0,
+  //   left: 0,
+  //   zIndex: 1,
+  // },
+  // icon: {
+  //   marginRight: 5,
+  // },
+  // placeholderStyle: {
+  //   fontSize: 16,
+  // },
+  // selectedTextStyle: {
+  //   fontSize: 16,
+  // },
+  // iconStyle: {
+  //   width: 20,
+  //   height: 20,
+  // },
+  // inputSearchStyle: {
+  //   height: 40,
+  //   fontSize: 16,
+  // },
+  // flagImage: {
+  //   width: 50,
+  //   height: 20,
+  //   marginRight: 10,
+  // },
+});
+
+export default styles;

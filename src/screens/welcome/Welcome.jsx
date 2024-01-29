@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,16 +11,34 @@ import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome } from "@expo/vector-icons";
 import styles from "./Welcome.module";
 import { StatusBar } from "expo-status-bar";
+import { useFormik } from "formik";
+// import DeviceInfo from 'react-native-device-info';
+// import Constants from 'expo-constants';
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
+import axios from "axios";
+
+const handleLoginValidation = (values, setIsFormValid) => {
+  const errors = {};
+
+  if (!values.userName) {
+    errors.userName = "First Name is required";
+  }
+
+  if (!values.password) {
+    errors.password = "Last Name is required";
+  }
+
+  const isValid = Object.keys(errors).length === 0;
+  setIsFormValid(isValid);
+
+  return errors;
+};
 
 const Welcome = ({ navigation }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
-  const handleLogin = () => {
-    console.log("Login button pressed");
-    navigation.navigate("Home");
-  };
+  const [expoPushToken, setExpoPushToken] = useState(null);
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -28,9 +46,60 @@ const Welcome = ({ navigation }) => {
 
   const handleRegisterationPress = () => {
     navigation.navigate("Registeration");
-  }
+  };
 
-  const isLoginButtonActive = username.length > 0 && password.length > 0;
+  const formik = useFormik({
+    initialValues: {
+      userName: "",
+      password: "",
+    },
+    onSubmit: async (values) => {
+      try {
+        const combainAdditionalDetails = {
+          ...values,
+          request_from: "mobile",
+          device_token: expoPushToken,
+          device_os: Device.osName,
+          device_name: Device.modelName,
+        };
+        console.log(combainAdditionalDetails, "all details");
+
+        const response = await axios.post(
+          "http://3.20.9.90/api/users/login",
+          combainAdditionalDetails
+        );
+        console.log(response.data, "login response");
+
+        if(response.data.status === "success"){
+          navigation.navigate("Home")
+        }
+
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          console.error(error.response.data);
+          alert(error.response.data.message);
+        } else {
+          console.error(error);
+        }
+      }
+    },
+    validate: (values) => handleLoginValidation(values, setIsFormValid),
+  });
+  useEffect(() => {
+    (async () => {
+      const { status } = await Notifications.requestPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to receive push notifications denied");
+        return;
+      }
+
+      if (status === "granted") {
+        const token = (await Notifications.getExpoPushTokenAsync()).data;
+        console.log("Expo Push Token:", token);
+        setExpoPushToken(token);
+      }
+    })();
+  }, []);
 
   return (
     <View>
@@ -68,8 +137,9 @@ const Welcome = ({ navigation }) => {
               style={styles.input}
               placeholder="Mobile number/Email"
               placeholderTextColor="#262673"
-              value={username}
-              onChangeText={(text) => setUsername(text)}
+              value={formik.values.userName}
+              onChangeText={formik.handleChange("userName")}
+              onBlur={formik.handleBlur("userName")}
             />
 
             <View style={styles.passwordContainer}>
@@ -78,9 +148,9 @@ const Welcome = ({ navigation }) => {
                 placeholder="Password"
                 placeholderTextColor="#262673"
                 secureTextEntry={!showPassword}
-                value={password}
-                onChangeText={(text) => setPassword(text)}
-                rightContentContainerStyle={styles.eyeIconContainer}
+                value={formik.values.password}
+                onChangeText={formik.handleChange("password")}
+                onBlur={formik.handleBlur("password")}
               />
               <TouchableOpacity
                 style={styles.eyeIcon}
@@ -94,24 +164,25 @@ const Welcome = ({ navigation }) => {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity onPress={() => console.log("Forgot Password?")}>
+            <TouchableOpacity onPress={() => alert("Forgot password")}>
               <Text style={styles.forgotPassword}>Forgot Password?</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={[
                 styles.button,
-                isLoginButtonActive
-                  ? styles.activeButton
-                  : styles.inactiveButton,
+                isFormValid ? styles.activeButton : styles.inactiveButton,
               ]}
-              onPress={handleLogin}
-              disabled={!isLoginButtonActive}
+              onPress={formik.handleSubmit}
+              disabled={!isFormValid}
             >
               <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={()=> handleRegisterationPress()} style={styles.createAccountButton}>
+            <TouchableOpacity
+              onPress={() => handleRegisterationPress()}
+              style={styles.createAccountButton}
+            >
               <Text style={styles.createAccountText}>Create Account</Text>
             </TouchableOpacity>
 
