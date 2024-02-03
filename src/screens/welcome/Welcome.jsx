@@ -17,6 +17,10 @@ import { useFormik } from "formik";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../store/loginStatusSlice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 const handleLoginValidation = (values, setIsFormValid) => {
   const errors = {};
@@ -39,6 +43,8 @@ const Welcome = ({ navigation }) => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState(null);
+  const [reload, setReload] = useState(false);
+  const dispatch = useDispatch()
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -54,6 +60,7 @@ const Welcome = ({ navigation }) => {
       password: "",
     },
     onSubmit: async (values) => {
+      navigation.navigate("Home")
       try {
         const combainAdditionalDetails = {
           ...values,
@@ -69,11 +76,16 @@ const Welcome = ({ navigation }) => {
           combainAdditionalDetails
         );
         console.log(response.data, "login response");
+        console.log(response.data.data.token)
 
         if(response.data.status === "success"){
+          await AsyncStorage.setItem('isLoggedIn', 'true');
+          await AsyncStorage.setItem('token', response.data.data.token);
+          const username = response.data.data.first_name;
+          await AsyncStorage.setItem('username', username);
+          console.log(username,"username")
           navigation.navigate("Home")
         }
-
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.error(error.response.data);
@@ -92,7 +104,6 @@ const Welcome = ({ navigation }) => {
         console.log("Permission to receive push notifications denied");
         return;
       }
-
       if (status === "granted") {
         const token = (await Notifications.getExpoPushTokenAsync()).data;
         console.log("Expo Push Token:", token);

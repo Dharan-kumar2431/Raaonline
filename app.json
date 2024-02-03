@@ -19,10 +19,17 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/raaonline.jpg",
         "backgroundColor": "#ffffff"
       },
-      "package": "dharankumar_raaonline.com"
+      "package": "dharankumar_raaonline.com",
+      "config": {
+        "cleartext": {
+          "config": {
+            "usesCleartextTraffic": true
+          }
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

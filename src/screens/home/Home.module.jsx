@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   coursesSection: {
     paddingHorizontal: 16,
-    paddingBottom: 300,
+    // paddingBottom: 300,
   },
   sectionHeading: {
     fontSize: 18,
@@ -50,10 +50,9 @@ const styles = StyleSheet.create({
   cardRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     marginHorizontal: -5,
   },
-
   courseCard: {
     backgroundColor: "white",
     borderRadius: 10,
