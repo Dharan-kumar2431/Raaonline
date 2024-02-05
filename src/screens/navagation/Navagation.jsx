@@ -13,6 +13,7 @@ import { ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from "../footer/Footer";
 import Cart from "../cart/Cart";
+import Profile from "../profile/Profile";
 
 const stack = createNativeStackNavigator();
 
@@ -83,6 +84,11 @@ const Navigation = () => {
          <stack.Screen
           name="Cart"
           component={Cart}
+          options={{ headerShown: false }}
+        />
+          <stack.Screen
+          name="Profile"
+          component={Profile}
           options={{ headerShown: false }}
         />
       </stack.Navigator>

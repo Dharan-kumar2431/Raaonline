@@ -21,6 +21,7 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../store/loginStatusSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import { LoginProvider } from "../context/logincontext/Logincontext";
 
 const handleLoginValidation = (values, setIsFormValid) => {
   const errors = {};
@@ -44,7 +45,7 @@ const Welcome = ({ navigation }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [expoPushToken, setExpoPushToken] = useState(null);
   const [reload, setReload] = useState(false);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -60,7 +61,7 @@ const Welcome = ({ navigation }) => {
       password: "",
     },
     onSubmit: async (values) => {
-      navigation.navigate("Home")
+      navigation.navigate("Home");
       try {
         const combainAdditionalDetails = {
           ...values,
@@ -76,15 +77,15 @@ const Welcome = ({ navigation }) => {
           combainAdditionalDetails
         );
         console.log(response.data, "login response");
-        console.log(response.data.data.token)
+        console.log(response.data.data.token);
 
-        if(response.data.status === "success"){
-          await AsyncStorage.setItem('isLoggedIn', 'true');
-          await AsyncStorage.setItem('token', response.data.data.token);
+        if (response.data.status === "success") {
+          await AsyncStorage.setItem("isLoggedIn", "true");
+          await AsyncStorage.setItem("token", response.data.data.token);
           const username = response.data.data.first_name;
-          await AsyncStorage.setItem('username', username);
-          console.log(username,"username")
-          navigation.navigate("Home")
+          await AsyncStorage.setItem("username", username);
+          console.log(username, "username");
+          navigation.navigate("Home");
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -107,108 +108,113 @@ const Welcome = ({ navigation }) => {
       if (status === "granted") {
         const token = (await Notifications.getExpoPushTokenAsync()).data;
         console.log("Expo Push Token:", token);
+        await AsyncStorage.setItem("deviceTocken", token);
         setExpoPushToken(token);
       }
     })();
   }, []);
 
   return (
-    <View>
-      <StatusBar />
-      <ScrollView>
-        <View style={styles.container}>
-          <LinearGradient
-            colors={["#040446", "#65B18C"]}
-            start={{ x: 1, y: 0 }}
-            end={{ x: 0, y: 1 }}
-            style={styles.gradientSquare}
-          >
+    <LoginProvider value={expoPushToken}>
+      <View>
+        <StatusBar />
+        <ScrollView>
+          <View style={styles.container}>
             <LinearGradient
-              colors={["#040446", "#4AA97A"]}
+              colors={["#040446", "#65B18C"]}
               start={{ x: 1, y: 0 }}
               end={{ x: 0, y: 1 }}
-              style={styles.innerSquare}
+              style={styles.gradientSquare}
             >
-              <View style={styles.imageContainer}>
-                <Image
-                  source={require("../../../assets/raaonline.jpg")}
-                  style={styles.logoImage}
+              <LinearGradient
+                colors={["#040446", "#4AA97A"]}
+                start={{ x: 1, y: 0 }}
+                end={{ x: 0, y: 1 }}
+                style={styles.innerSquare}
+              >
+                <View style={styles.imageContainer}>
+                  <Image
+                    source={require("../../../assets/raaonline.jpg")}
+                    style={styles.logoImage}
+                  />
+                </View>
+
+                <Text style={styles.companyText}>Premier Medical</Text>
+                <Text style={styles.subtitleText}>E-learning Platform</Text>
+              </LinearGradient>
+            </LinearGradient>
+
+            <View style={styles.loginForm}>
+              <Text style={styles.loginHeading}>Login Account</Text>
+
+              <TextInput
+                style={styles.input}
+                placeholder="Mobile number/Email"
+                placeholderTextColor="#262673"
+                value={formik.values.userName}
+                onChangeText={formik.handleChange("userName")}
+                onBlur={formik.handleBlur("userName")}
+              />
+
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={{ width: 250 }}
+                  placeholder="Password"
+                  placeholderTextColor="#262673"
+                  secureTextEntry={!showPassword}
+                  value={formik.values.password}
+                  onChangeText={formik.handleChange("password")}
+                  onBlur={formik.handleBlur("password")}
                 />
+                <TouchableOpacity
+                  style={styles.eyeIcon}
+                  onPress={handleTogglePassword}
+                >
+                  <FontAwesome
+                    name={showPassword ? "eye-slash" : "eye"}
+                    size={20}
+                    color="blue"
+                  />
+                </TouchableOpacity>
               </View>
 
-              <Text style={styles.companyText}>Premier Medical</Text>
-              <Text style={styles.subtitleText}>E-learning Platform</Text>
-            </LinearGradient>
-          </LinearGradient>
+              <TouchableOpacity onPress={() => alert("Forgot password")}>
+                <Text style={styles.forgotPassword}>Forgot Password?</Text>
+              </TouchableOpacity>
 
-          <View style={styles.loginForm}>
-            <Text style={styles.loginHeading}>Login Account</Text>
-
-            <TextInput
-              style={styles.input}
-              placeholder="Mobile number/Email"
-              placeholderTextColor="#262673"
-              value={formik.values.userName}
-              onChangeText={formik.handleChange("userName")}
-              onBlur={formik.handleBlur("userName")}
-            />
-
-            <View style={styles.passwordContainer}>
-              <TextInput
-                style={{ width: 250 }}
-                placeholder="Password"
-                placeholderTextColor="#262673"
-                secureTextEntry={!showPassword}
-                value={formik.values.password}
-                onChangeText={formik.handleChange("password")}
-                onBlur={formik.handleBlur("password")}
-              />
               <TouchableOpacity
-                style={styles.eyeIcon}
-                onPress={handleTogglePassword}
+                style={[
+                  styles.button,
+                  isFormValid ? styles.activeButton : styles.inactiveButton,
+                ]}
+                onPress={formik.handleSubmit}
+                disabled={!isFormValid}
               >
-                <FontAwesome
-                  name={showPassword ? "eye-slash" : "eye"}
-                  size={20}
-                  color="blue"
-                />
+                <Text style={styles.buttonText}>Login</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => handleRegisterationPress()}
+                style={styles.createAccountButton}
+              >
+                <Text style={styles.createAccountText}>Create Account</Text>
+              </TouchableOpacity>
+
+              <View style={styles.orContainer}>
+                <Text style={styles.orText}>or</Text>
+              </View>
+
+              <TouchableOpacity style={styles.googleButton}>
+                <FontAwesome name="google" size={20} color="white" />
+                <Text style={styles.googleButtonText}>
+                  Continue with Google
+                </Text>
               </TouchableOpacity>
             </View>
-
-            <TouchableOpacity onPress={() => alert("Forgot password")}>
-              <Text style={styles.forgotPassword}>Forgot Password?</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.button,
-                isFormValid ? styles.activeButton : styles.inactiveButton,
-              ]}
-              onPress={formik.handleSubmit}
-              disabled={!isFormValid}
-            >
-              <Text style={styles.buttonText}>Login</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => handleRegisterationPress()}
-              style={styles.createAccountButton}
-            >
-              <Text style={styles.createAccountText}>Create Account</Text>
-            </TouchableOpacity>
-
-            <View style={styles.orContainer}>
-              <Text style={styles.orText}>or</Text>
-            </View>
-
-            <TouchableOpacity style={styles.googleButton}>
-              <FontAwesome name="google" size={20} color="white" />
-              <Text style={styles.googleButtonText}>Continue with Google</Text>
-            </TouchableOpacity>
           </View>
-        </View>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
+    </LoginProvider>
   );
 };
 

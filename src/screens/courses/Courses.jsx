@@ -7,7 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   Modal,
-  TouchableWithoutFeedback,
+  ToastAndroid,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
@@ -81,14 +81,15 @@ const CourseDetails = ({ navigation, route }) => {
 
       if (selectedPrice) {
         console.log("Selected Plan Prices:", selectedPrice);
+        console.log("selected price id", selectedPrice.id);
 
         try {
           const response = await axios.post(
             "http://3.20.9.90/api/carts",
             {
-              sub_category_id: 13, 
-              sub_category_price_id: 506, 
-              is_book_purchased: 0
+              sub_category_id: selectedPrice.sub_category_id,
+              sub_category_price_id: selectedPrice.id,
+              is_book_purchased: 0,
             },
             {
               headers: {
@@ -96,24 +97,33 @@ const CourseDetails = ({ navigation, route }) => {
               },
             }
           );
-          console.log(response);
+          console.log(response.data);
+          if (response.data.status === "success") {
+            showToast("Item added to cart successfully");
+            setIsContinueEnabled(false);
+            navigation.navigate("Cart");
+          }
         } catch (error) {
           if (axios.isAxiosError(error)) {
             console.error(error.response.data);
             alert(error.response.data.message);
+            setIsContinueEnabled(false);
           } else {
             console.error(error);
           }
         }
 
         setIsModalVisible(false);
-        navigation.navigate("Cart", { SelectedPrice: selectedPrice });
       } else {
         console.error("Selected plan not found!");
       }
     } else {
       console.error("No plan selected!");
     }
+  };
+
+  const showToast = (message) => {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
   };
 
   return (

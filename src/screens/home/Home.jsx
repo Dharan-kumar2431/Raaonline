@@ -20,10 +20,10 @@ const Home = ({ navigation, route }) => {
     navigation.navigate("Course", { courseName: name , courseId: id});
   };
 
-  const logout = async() => {
-    await AsyncStorage.setItem('isLoggedIn', 'false');
-    navigation.navigate("Welcome")
-  }
+  // const logout = async() => {
+  //   await AsyncStorage.setItem('isLoggedIn', 'false');
+  //   navigation.navigate("Welcome")
+  // }
 
   useEffect(()=>{
     console.log("working")
@@ -93,11 +93,11 @@ const Home = ({ navigation, route }) => {
               </TouchableOpacity>
             ))}
           </View>
-          <View>
+          {/* <View>
           <TouchableOpacity onPress={logout}>
               <Text>logout</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
       <View>

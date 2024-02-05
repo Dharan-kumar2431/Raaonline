@@ -3,7 +3,7 @@ import styles from "./CreatePageHeader.module";
 import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome } from "@expo/vector-icons";
 
-const Createaccountheader = ({navigation, name}) => {
+const Createaccountheader = ({navigation, name, height = 100}) => {
     const goBack = () => {
         navigation.goBack();
       };    
@@ -13,7 +13,7 @@ const Createaccountheader = ({navigation, name}) => {
         colors={["#4F94CD", "#FFD700"]}
         start={{ x: 1, y: 0 }}
         end={{ x: 0, y: 1 }}
-        style={styles.header}
+        style={[styles.header, {height}]}
       >
         <TouchableOpacity
           onPress={goBack}
