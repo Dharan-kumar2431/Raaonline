@@ -7,13 +7,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
 import Footer from "../footer/Footer";
 import { CommonActions } from "@react-navigation/native";
-import { LoginContext } from "../context/logincontext/Logincontext";
+
 
 const Profile = ({ navigation }) => {
   const [userDetails, setUserDetails] = useState([]);
-  const deviceTok = useContext(LoginContext)
-
-  console.log(deviceTok, "========================>")
 
   useEffect(() => {
     (async () => {

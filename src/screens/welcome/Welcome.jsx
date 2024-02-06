@@ -21,7 +21,6 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../store/loginStatusSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import { LoginProvider } from "../context/logincontext/Logincontext";
 
 const handleLoginValidation = (values, setIsFormValid) => {
   const errors = {};
@@ -61,7 +60,6 @@ const Welcome = ({ navigation }) => {
       password: "",
     },
     onSubmit: async (values) => {
-      navigation.navigate("Home");
       try {
         const combainAdditionalDetails = {
           ...values,
@@ -115,7 +113,7 @@ const Welcome = ({ navigation }) => {
   }, []);
 
   return (
-    <LoginProvider value={expoPushToken}>
+    
       <View>
         <StatusBar />
         <ScrollView>
@@ -214,7 +212,6 @@ const Welcome = ({ navigation }) => {
           </View>
         </ScrollView>
       </View>
-    </LoginProvider>
   );
 };
 
