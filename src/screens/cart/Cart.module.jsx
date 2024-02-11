@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Color } from "../../components/misc/Colors";
 
 const styles = StyleSheet.create({
   card: {
@@ -8,7 +9,7 @@ const styles = StyleSheet.create({
     marginVertical: 7,
     marginHorizontal:25,
     borderWidth: 1,
-    borderColor: "#00468D",
+    borderColor: Color.SECONDARYCOLOR,
     borderRadius: 10,
     backgroundColor: "#fff",
     shadowColor: "#000",
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     marginBottom: 5,
-    color:"#00468D"
+    color:Color.SECONDARYCOLOR
   },
   category: {
     fontSize: 12,
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
     marginBottom: 10,
-    color: "#00468D",
+    color: Color.SECONDARYCOLOR,
   },
   subTotalContainer: {
     flexDirection: "row",
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     paddingRight:10
   },
   buyNowButton: {
-    backgroundColor: "#00468D",
+    backgroundColor: Color.SECONDARYCOLOR,
     borderRadius: 5,
     padding: 10,
     alignItems: "center",
@@ -167,6 +168,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+  loaderContainer:{
+    flex:1,
+    alignItems:"center",
+    justifyContent:"center"
+  }
 });
 
 export default styles;

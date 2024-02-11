@@ -12,7 +12,7 @@ const Footer = () => {
         setSelectedIcon(iconName);
         switch (iconName) {
             case "home":
-                navigation.navigate("Home");
+                navigation.navigate("Homes");
                 break;
             case "cart":
                 navigation.navigate("Cart");

@@ -3,6 +3,7 @@ import { Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform
 import Createaccountheader from "../header/CreatePageHeader";
 import styles from "./Verifyotp.module";
 import axios from "axios";
+import { Color } from "../../../components/misc/Colors";
 
 const Verifyotp = ({ navigation, route }) => {
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -78,7 +79,7 @@ const Verifyotp = ({ navigation, route }) => {
 
             <View style={{marginTop: 30}}>
                 <Text>
-                I didn't receive any code <Text style={{color:"#00468D",fontWeight:"bold",textDecorationLine:"underline"}}>RESEND OTP</Text>
+                I didn't receive any code <Text style={{color:Color.SECONDARYCOLOR,fontWeight:"bold",textDecorationLine:"underline"}}>RESEND OTP</Text>
                 </Text>
             </View>
 

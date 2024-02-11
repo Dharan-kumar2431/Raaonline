@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Color } from "../../components/misc/Colors";
 
 const styles = StyleSheet.create({
   personalDetailscontainer: {
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
     marginBottom:10,
   },
   listitemstext:{
-    color:"#262673",
+    color:Color.TEXTCOLOR,
     fontWeight:"500"
   },
   logout:{

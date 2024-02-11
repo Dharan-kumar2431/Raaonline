@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Color } from "../../components/misc/Colors";
 
 const styles = StyleSheet.create({
   greetingContainer: {
@@ -9,7 +10,7 @@ const styles = StyleSheet.create({
   },
   greetingText: {
     fontSize: 18,
-    color: "#262673",
+    color: Color.TEXTCOLOR,
   },
   offersButton: {
     backgroundColor: "lightblue",
@@ -21,7 +22,7 @@ const styles = StyleSheet.create({
   offersButtonText: {
     color: "white",
     marginRight: 5,
-    color: "#262673",
+    color: Color.TEXTCOLOR,
   },
   notificationIcon: {
     marginLeft: 25,
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#262673",
+    color: Color.TEXTCOLOR,
   },
   cardRow: {
     flexDirection: "row",
@@ -74,8 +75,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 10,
     textAlign: "center",
-    color: "#262673",
+    color: Color.TEXTCOLOR,
   },
+  loaderContainer:{
+    flex:1,
+    alignItems:"center",
+    justifyContent:"center"
+  }
 });
 
 export default styles;

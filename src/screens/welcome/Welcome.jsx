@@ -21,6 +21,7 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../store/loginStatusSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import { Color } from "../../components/misc/Colors";
 
 const handleLoginValidation = (values, setIsFormValid) => {
   const errors = {};
@@ -148,7 +149,7 @@ const Welcome = ({ navigation }) => {
               <TextInput
                 style={styles.input}
                 placeholder="Mobile number/Email"
-                placeholderTextColor="#262673"
+                placeholderTextColor={Color.TEXTCOLOR}
                 value={formik.values.userName}
                 onChangeText={formik.handleChange("userName")}
                 onBlur={formik.handleBlur("userName")}
@@ -158,7 +159,7 @@ const Welcome = ({ navigation }) => {
                 <TextInput
                   style={{ width: 250 }}
                   placeholder="Password"
-                  placeholderTextColor="#262673"
+                  placeholderTextColor={Color.TEXTCOLOR}
                   secureTextEntry={!showPassword}
                   value={formik.values.password}
                   onChangeText={formik.handleChange("password")}

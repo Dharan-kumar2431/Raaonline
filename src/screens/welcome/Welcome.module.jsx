@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Color } from "../../components/misc/Colors";
 
 const styles = StyleSheet.create({
     container: {
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
-        color: "#262673"
+        color: Color.TEXTCOLOR
       },
       input: {
         height: 40,
@@ -61,7 +62,6 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         paddingLeft: 10,
         borderRadius: 5,
-        // color: "#262673"
       },
       passwordContainer: {
         flexDirection: 'row',
@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
         borderWidth:1,
         paddingLeft: 10,
         justifyContent:"space-between",
-        // color: "#262673"
       },
       eyeIconContainer: {
         position: 'absolute',

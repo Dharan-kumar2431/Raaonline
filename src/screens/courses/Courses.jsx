@@ -8,6 +8,7 @@ import {
   ScrollView,
   Modal,
   ToastAndroid,
+  ActivityIndicator,
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
@@ -16,30 +17,38 @@ import { Dropdown } from "react-native-element-dropdown";
 import styles from "./Courses.module";
 import Createaccountheader from "../createaccount/header/CreatePageHeader";
 import Footer from "../footer/Footer";
+import DataLoader from "../loaders/dataloader/Dataloader";
+import { Color } from "../../components/misc/Colors";
 
 const CourseDetails = ({ navigation, route }) => {
   const [subCoursesDetails, setSubCoursesDetails] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
-  const [isContinueEnabled, setIsContinueEnabled] = useState(false); // Track if Continue button should be enabled
+  const [isContinueEnabled, setIsContinueEnabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); 
 
   const courseHeading = route.params.courseName;
   const courseid = route.params.courseId;
+  console.log(courseid,"id<==================================")
 
   useEffect(() => {
     const fetchCourses = async () => {
       const token = await AsyncStorage.getItem("token");
       console.log("working", token);
       try {
-        const response = await axios.get("http://3.20.9.90/api/subCategories", {
+        const response = await axios.get(`http://3.20.9.90/api/subCategories?filterKey=category_id&filterValue=${courseid}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         console.log(response.data.data, "subcourses details");
         setSubCoursesDetails(response.data.data);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
       } catch (error) {
+        setIsLoading(false); 
         if (axios.isAxiosError(error)) {
           console.error(error.response.data);
           alert(error.response.data.message);
@@ -126,115 +135,124 @@ const CourseDetails = ({ navigation, route }) => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   };
 
+  const handleCoursePress = (name, id) => {
+    navigation.navigate("Subcourses",{ courseName: name , courseId: id});
+  }
+
   return (
     <View style={styles.container}>
       <View>
         <Createaccountheader navigation={navigation} name={"Go Back"} />
       </View>
-      <ScrollView style={styles.content}>
-        <Text style={styles.heading}>{courseHeading}</Text>
-
-        <View style={styles.cardRow}>
-          {subCoursesDetails.map((course) => (
-            <View key={course.id} style={styles.card}>
-              <View style={{ flex: 1 }}>
-                <TouchableOpacity>
-                  <Image
-                    source={{ uri: course.image }}
-                    style={styles.cardImage}
-                  />
-                </TouchableOpacity>
-                <View style={styles.iconContainer}>
-                  <FontAwesome name="heart-o" size={20} color="white" />
-                </View>
-                <View style={styles.iconArrowContainer}>
-                  <FontAwesome
-                    style={{}}
-                    name="angle-double-right"
-                    size={30}
-                    color="white"
-                  />
-                </View>
-              </View>
-
-              <View style={{ flex: 2 }}>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.cardTitle}>{course.name}</Text>
-                </View>
-                <View style={styles.dropdownWrapper}>
-                  <Dropdown
-                    style={{ backgroundColor: "#E7F6FF", paddingLeft: 5 }}
-                    placeholder="Course Details"
-                    placeholderStyle={{ color: "#00468D", fontSize: 14 }}
-                    data={course.features
-                      .split("\r\n")
-                      .map((feature, index) => ({
-                        label: feature,
-                        value: index.toString(),
-                        disable: true,
-                      }))}
-                    labelField="label"
-                    value="Course Details"
-                    containerStyle={{
-                      backgroundColor: "#00468D",
-                      borderRadius: 10,
-                    }}
-                    itemTextStyle={{
-                      fontSize: 12,
-                      color: "white",
-                      marginBottom: -18,
-                      marginTop: -45,
-                      paddingTop: 30,
-                    }}
-                  />
-                </View>
-
-                <Text style={styles.actualprice}>
-                  Rs.{" "}
-                  <Text style={{ textDecorationLine: "line-through" }}>
-                    {parseInt(course.sub_category_prices[0].actual_price)}
-                  </Text>
-                </Text>
-                <View style={{ flexDirection: "row" }}>
-                  <Text style={styles.price}>
-                    Rs. {parseInt(course.sub_category_prices[0].offer_price)}
-                  </Text>
-
-                  <Text style={styles.offerPercentage}>
-                    {parseInt(
-                      (course.sub_category_prices[0].offer_price /
-                        course.sub_category_prices[0].actual_price) *
-                        100
-                    )}
-                    % Off
-                  </Text>
-                </View>
-
-                <View style={styles.buttonRow}>
-                  <TouchableOpacity
-                    style={styles.addToCartButton}
-                    onPress={() => openModal(course)}
-                  >
-                    <Text style={styles.buttonText}>Add to Cart</Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity style={styles.featuresButton}>
-                    <Text style={styles.featurebuttonText}>Features</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          ))}
+      {isLoading ? (
+        <View style={styles.loaderContainer}>
+          <DataLoader/>
         </View>
-      </ScrollView>
-      <View>
-        <Footer />
-      </View>
+      ) : (
+        <ScrollView style={styles.content}>
+          <Text style={styles.heading}>{courseHeading}</Text>
+
+          <View style={styles.cardRow}>
+            {subCoursesDetails.map((course) => (
+              <View key={course.id} style={styles.card}>
+                <View style={{ flex: 1 }}>
+                  <TouchableOpacity onPress={() => handleCoursePress(course.name, course.id) }>
+                    <Image
+                      source={{ uri: course.image }}
+                      style={styles.cardImage}
+                    />
+                  </TouchableOpacity>
+                  <View style={styles.iconContainer}>
+                    <FontAwesome name="heart-o" size={20} color="white" />
+                  </View>
+                  <View style={styles.iconArrowContainer}>
+                    <TouchableOpacity onPress={() => handleCoursePress(course.name, course.id) }>
+                      <FontAwesome
+                        style={{}}
+                        name="angle-double-right"
+                        size={30}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <View style={{ flex: 2 }}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.cardTitle}>{course.name}</Text>
+                  </View>
+                  <View style={styles.dropdownWrapper}>
+                    <Dropdown
+                      style={{ backgroundColor: "#E7F6FF", paddingLeft: 5 }}
+                      placeholder="Course Details"
+                      placeholderStyle={{ color: Color.SECONDARYCOLOR, fontSize: 14 }}
+                      data={course.features
+                        .split("\r\n")
+                        .map((feature, index) => ({
+                          label: feature,
+                          value: index.toString(),
+                          disable: true,
+                        }))}
+                      labelField="label"
+                      value="Course Details"
+                      containerStyle={{
+                        backgroundColor: Color.SECONDARYCOLOR,
+                        borderRadius: 10,
+                      }}
+                      itemTextStyle={{
+                        fontSize: 12,
+                        color: "white",
+                        marginBottom: -18,
+                        marginTop: -45,
+                        paddingTop: 30,
+                      }}
+                    />
+                  </View>
+
+                  <Text style={styles.actualprice}>
+                    Rs.{" "}
+                    <Text style={{ textDecorationLine: "line-through" }}>
+                      {parseInt(course.sub_category_prices[0].actual_price)}
+                    </Text>
+                  </Text>
+                  <View style={{ flexDirection: "row" }}>
+                    <Text style={styles.price}>
+                      Rs. {parseInt(course.sub_category_prices[0].offer_price)}
+                    </Text>
+
+                    <Text style={styles.offerPercentage}>
+                      {parseInt(
+                        (course.sub_category_prices[0].offer_price /
+                          course.sub_category_prices[0].actual_price) *
+                          100
+                      )}
+                      % Off
+                    </Text>
+                  </View>
+
+                  <View style={styles.buttonRow}>
+                    <TouchableOpacity
+                      style={styles.addToCartButton}
+                      onPress={() => openModal(course)}
+                    >
+                      <Text style={styles.buttonText}>Add to Cart</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.featuresButton}>
+                      <Text style={styles.featurebuttonText}>Features</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+      )}
       <Modal
         animationType="slide"
         transparent={true}
         visible={isModalVisible}
-        onRequestClose={closeModal}
+        onRequestClose={closeModal}  
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -259,7 +277,7 @@ const CourseDetails = ({ navigation, route }) => {
                       style={{
                         width: 130,
                         textAlign: "center",
-                        color: "#00468D",
+                        color: Color.SECONDARYCOLOR,
                       }}
                     >
                       Subscription Plans

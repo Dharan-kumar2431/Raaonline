@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Color } from "../../../components/misc/Colors";
 
 const styles= StyleSheet.create({
     container:{
@@ -18,7 +19,7 @@ const styles= StyleSheet.create({
       registrationHeading: {
         fontSize: 16,
         fontWeight: "500",
-        color: "#262673",
+        color: Color.TEXTCOLOR,
         // textAlign: "center",
         marginHorizontal:40,
         marginVertical: 20,
@@ -26,7 +27,7 @@ const styles= StyleSheet.create({
     currenteduication:{
         borderWidth:1,
         width:"80%",
-        borderColor:"#262673",
+        borderColor:Color.TEXTCOLOR,
         borderRadius:5,
     },
     input: {
@@ -39,9 +40,9 @@ const styles= StyleSheet.create({
         marginVertical: 10,
         padding: 10,
         borderBottomWidth: 1,
-        borderColor: "#262673",
+        borderColor: Color.TEXTCOLOR,
         width:310,
-        color:"#262673"
+        color:Color.TEXTCOLOR
       },
       calender:{
         borderWidth:1,
@@ -56,8 +57,8 @@ const styles= StyleSheet.create({
         marginVertical: 10,
         padding: 10,
         borderBottomWidth: 1,
-        borderColor: "#262673",
-        color:"#262673",
+        borderColor: Color.TEXTCOLOR,
+        color:Color.TEXTCOLOR,
         // justifyContent:"space-between",
         paddingRight:20
       },
@@ -72,7 +73,7 @@ const styles= StyleSheet.create({
         padding:8,
         paddingHorizontal:10,
         borderRadius:5,
-        borderColor:"#262673"
+        borderColor:Color.TEXTCOLOR
       },
       button: {
         // backgroundColor: "lightblue",

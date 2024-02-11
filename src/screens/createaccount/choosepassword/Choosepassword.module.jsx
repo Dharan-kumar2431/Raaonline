@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
+import { Color } from "../../../components/misc/Colors";
 
 const styles = StyleSheet.create({
     registrationHeading: {
         fontSize: 16,
         fontWeight: "500",
-        color: "#262673",
+        color: Color.TEXTCOLOR,
         // textAlign: "center",
         marginHorizontal:40,
         marginVertical: 30,
@@ -23,7 +24,6 @@ const styles = StyleSheet.create({
         borderWidth:1,
         paddingLeft: 10,
         justifyContent:"space-between",
-        // color: "#262673"
       },
       eyeIconContainer: {
         position: 'absolute',
@@ -41,10 +41,10 @@ const styles = StyleSheet.create({
       },
       checkbox: {
         margin: 8,
-        borderColor: "#262673",
+        borderColor: Color.TEXTCOLOR,
       },
       checkboxText: {
-        color: "#262673",
+        color: Color.TEXTCOLOR,
         fontSize:15,
         paddingTop:10
       },
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         padding:8,
         paddingHorizontal:10,
         borderRadius:5,
-        borderColor:"#262673"
+        borderColor:Color.TEXTCOLOR
       },
       button: {
         // backgroundColor: "lightblue",

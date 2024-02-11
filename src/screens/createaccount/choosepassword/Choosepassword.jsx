@@ -9,6 +9,7 @@ import { useFormik } from "formik";
 import styles from "./Choosepassword.module";
 import Createaccountheader from "../header/CreatePageHeader";
 import axios from "axios";
+import { Color } from "../../../components/misc/Colors";
 
 const validatePasswordDetails = (values, setIsFormValid) => {
     const errors = {};
@@ -129,7 +130,7 @@ const Choosepassword = ({ navigation }) => {
             <TextInput
               style={styles.input}
               placeholder="Password"
-              placeholderTextColor="#262673"
+              placeholderTextColor={Color.TEXTCOLOR}
               secureTextEntry={!showPassword}
               value={formik.values.password}
               onChangeText={formik.handleChange("password")}
@@ -154,7 +155,7 @@ const Choosepassword = ({ navigation }) => {
             <TextInput
               style={styles.input}
               placeholder="Confirm Password"
-              placeholderTextColor="#262673"
+              placeholderTextColor={Color.TEXTCOLOR}
               secureTextEntry={!showPassword}
               value={formik.values.confirmPassword}
               onChangeText={formik.handleChange("confirmPassword")}
@@ -204,7 +205,7 @@ const Choosepassword = ({ navigation }) => {
                 <AntDesign
                   name="arrowleft"
                   size={25}
-                  color="#262673"
+                  color={Color.TEXTCOLOR}
                   onPress={handlebackarrow}
                 />
               </TouchableOpacity>

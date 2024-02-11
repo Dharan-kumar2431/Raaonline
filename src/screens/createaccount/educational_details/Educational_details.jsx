@@ -9,6 +9,7 @@ import YearPickerModal from "../yearmodelpicker/Yearmodelpicker";
 import { currenteducation } from "../../../shared/datas";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserData, setUserData } from "../../../store/userSlice";
+import { Color } from "../../../components/misc/Colors";
 
 const validateEducationalDetails = (values, setIsFormValid) => {
   const errors = {};
@@ -160,7 +161,7 @@ const Educationaldetails = ({ navigation, route }) => {
                   key={education.id}
                   label={education.label}
                   value={education.id}
-                  style={{ fontSize: 15, color: "#262673" }}
+                  style={{ fontSize: 15, color: Color.TEXTCOLOR }}
                 />
               ))}
             </Picker>
@@ -170,7 +171,7 @@ const Educationaldetails = ({ navigation, route }) => {
           >
             <TextInput
               placeholder="Country"
-              placeholderTextColor="#262673"
+              placeholderTextColor={Color.TEXTCOLOR}
               value={formik.values.selectedCountry}
               editable={false}
               style={styles.input}
@@ -179,7 +180,7 @@ const Educationaldetails = ({ navigation, route }) => {
           <TouchableOpacity onPress={() => handleSelectCountriesState("state")}>
             <TextInput
               placeholder="State"
-              placeholderTextColor="#262673"
+              placeholderTextColor={Color.TEXTCOLOR}
               value={formik.values.SelectedState}
               editable={false}
               style={styles.input}
@@ -188,7 +189,7 @@ const Educationaldetails = ({ navigation, route }) => {
 
           <TextInput
             placeholder="College Name"
-            placeholderTextColor="#262673"
+            placeholderTextColor={Color.TEXTCOLOR}
             style={styles.input}
             value={formik.values.collegeName}
             onChangeText={(text) => formik.setFieldValue("collegeName", text)}
@@ -255,7 +256,7 @@ const Educationaldetails = ({ navigation, route }) => {
                 <AntDesign
                   name="arrowleft"
                   size={25}
-                  color="#262673"
+                  color={Color.TEXTCOLOR}
                   onPress={handlebackarrow}
                 />
               </TouchableOpacity>

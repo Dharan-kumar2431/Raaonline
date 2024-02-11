@@ -20,6 +20,7 @@ import Createaccountheader from "./header/CreatePageHeader";
 import { setUserData } from "../../store/userSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import { Color } from "../../components/misc/Colors";
 const { width, height } = Dimensions.get("window");
 
 const validateRegistration = (values, setIsFormValid) => {
@@ -197,7 +198,7 @@ const Registeration = ({ navigation }) => {
           <TextInput
             style={styles.input}
             placeholder="First Name"
-            placeholderTextColor="#262673"
+            placeholderTextColor={Color.TEXTCOLOR}
             onChangeText={formik.handleChange("first_name")}
             onBlur={formik.handleBlur("first_name")}
             value={formik.values.first_name}
@@ -205,7 +206,7 @@ const Registeration = ({ navigation }) => {
           <TextInput
             style={styles.input}
             placeholder="Last Name"
-            placeholderTextColor="#262673"
+            placeholderTextColor={Color.TEXTCOLOR}
             onChangeText={formik.handleChange("last_name")}
             onBlur={formik.handleBlur("last_name")}
             value={formik.values.last_name}
@@ -217,11 +218,11 @@ const Registeration = ({ navigation }) => {
                 borderColor:
                   formik.touched.email && formik.errors.email
                     ? "red"
-                    : "#262673",
+                    : Color.TEXTCOLOR,
               },
             ]}
             placeholder="Email ID"
-            placeholderTextColor="#262673"
+            placeholderTextColor={Color.TEXTCOLOR}
             onChangeText={formik.handleChange("email")}
             onBlur={formik.handleBlur("email")}
             value={formik.values.email}
@@ -236,7 +237,7 @@ const Registeration = ({ navigation }) => {
               width: "80%",
               borderWidth: 1,
               borderRadius: 5,
-              borderColor: "#262673",
+              borderColor: Color.TEXTCOLOR,
               marginTop: 10,
             }}
           >
@@ -264,7 +265,7 @@ const Registeration = ({ navigation }) => {
                 </View>
 
                 <View style={{ justifyContent: "center", marginLeft: 5 }}>
-                  <Text style={{ color: "#262673", fontSize: 18 }}>
+                  <Text style={{ color: Color.TEXTCOLOR, fontSize: 18 }}>
                     {selectedArea?.callingCode}
                   </Text>
                 </View>
@@ -272,7 +273,7 @@ const Registeration = ({ navigation }) => {
                 <View style={{ justifyContent: "center", marginLeft: 15 }}>
                   <Image
                     source={down}
-                    style={{ width: 10, height: 10, tintColor: "#262673" }}
+                    style={{ width: 10, height: 10, tintColor: Color.TEXTCOLOR}}
                   />
                 </View>
               </TouchableOpacity>
@@ -284,7 +285,7 @@ const Registeration = ({ navigation }) => {
                   marginTop: 8,
                 }}
                 placeholder="Mobile Number"
-                placeholderTextColor="#262673"
+                placeholderTextColor={Color.TEXTCOLOR}
                 onChangeText={formik.handleChange("phone_number")}
                 onBlur={formik.handleBlur("phone_number")}
                 value={formik.values.phone_number}

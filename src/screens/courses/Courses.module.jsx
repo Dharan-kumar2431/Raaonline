@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Color } from "../../components/misc/Colors";
 
 const styles = StyleSheet.create({
   container: {
@@ -11,7 +12,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     marginVertical: 10,
-    color:"#00468D"
+    color:Color.SECONDARYCOLOR
   },
   cardRow: {
     flexDirection: "row",
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "bold",
     padding: 10,
-    color:"#00468D"
+    color:Color.SECONDARYCOLOR
   },
   dropdownButton: {
     backgroundColor: "#007bff",
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     marginLeft:5
   },
   price:{
-    color:"#00468D",
+    color:Color.SECONDARYCOLOR,
     paddingVertical:10,
     fontSize:14,
     marginLeft:5
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
   offerPercentage:{
     marginLeft:12,
     paddingVertical:10,
-    color:"00468D"
+    color:Color.SECONDARYCOLOR
   },
   buttonRow: {
     flexDirection: "row",
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     marginBottom: 0,
   },
   addToCartButton: {
-    backgroundColor: "#00468D",
+    backgroundColor: Color.SECONDARYCOLOR,
     paddingVertical: 5,
     paddingHorizontal: 5,
     borderRadius: 5,
@@ -95,14 +96,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: "#00468D",
+    borderColor: Color.SECONDARYCOLOR,
   },
   buttonText: {
     color: "white",
     fontSize: 12,
   },
   featurebuttonText: {
-    color: "#00468D",
+    color: Color.SECONDARYCOLOR,
     fontSize: 12,
     fontWeight:"500"
   },
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
     textAlign:"center",
-    color:"#00468D"
+    color:Color.SECONDARYCOLOR
     // borderBottomWidth:1,
     // borderColor:"lightgray",
     // paddingBottom:5
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
   subCategoryTitle:{
     fontSize:15,
     fontWeight:"bold",
-    color:"#00468D"
+    color:Color.SECONDARYCOLOR
   },
   subdescription:{
     color:"gray",
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     fontSize:14
   },
   modelofferprice:{
-    color:"#00468D",
+    color:Color.SECONDARYCOLOR,
     padding:3,
     fontSize:14,
     paddingHorizontal:10,
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
     color:"#59a4f0",
   },
   continueButton: {
-    backgroundColor: "#00468D",
+    backgroundColor: Color.SECONDARYCOLOR,
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
@@ -210,6 +211,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+  loaderContainer:{
+    flex:1,
+    alignItems:"center",
+    justifyContent:"center"
+  }
 });
 
 export default styles;

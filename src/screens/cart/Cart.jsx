@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View, ToastAndroid } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View, ToastAndroid, ActivityIndicator } from "react-native";
 import styles from "./Cart.module";
 import Createaccountheader from "../createaccount/header/CreatePageHeader";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
 import Footer from "../footer/Footer";
+import DataLoader from "../loaders/dataloader/Dataloader";
 
 const Cart = ({ navigation }) => {
   const [cartItems, setCartItems] = useState([]);
   const [cartTotal, setCartTotal] = useState(0);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     fetchData();
@@ -32,6 +34,8 @@ const Cart = ({ navigation }) => {
       } else {
         console.error(error);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,7 +66,6 @@ const Cart = ({ navigation }) => {
     }
   };
 
-
   const showToast = (message) => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   };
@@ -72,52 +75,58 @@ const Cart = ({ navigation }) => {
       <View>
         <Createaccountheader navigation={navigation} name={"Checkout"} />
       </View>
-      <ScrollView>
-        {cartItems.length === 0 && (
-          <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text style={{ fontSize: 18 }}>No items in your cart</Text>
-          </View>
-        )}
-        {cartItems.length > 0 && (
-          <View style={{marginTop:15}}>
-            {cartItems.map(item => (
-              <View key={item.id} style={styles.card}>
-                <View style={styles.imageContainer}>
-                  <Image
-                    source={{ uri: item.sub_category.image }}
-                    style={styles.image}
-                  />
-                </View>
-                <View style={styles.detailsContainer}>
-                  <Text style={styles.subCategory}>{item.sub_category.name}</Text>
-                  <Text style={styles.category}>
-                    {item.sub_category.categories[0].name}
-                  </Text>
-                  <View style={{ flexDirection: "row" }}>
-                    <View>
-                      <View style={styles.crossline} />
-                      <Text style={styles.modelprice}>
-                        Rs. {item.sub_category_price.actual_price}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.modelofferprice}>
-                        Rs. {item.sub_category_price.offer_price}
-                      </Text>
+      {loading ? ( 
+        <View style={[styles.loaderContainer]}>
+          <DataLoader/>
+        </View>
+      ) : (
+        <ScrollView>
+          {cartItems.length === 0 && (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+              <Text style={{ fontSize: 18 }}>No items in your cart</Text>
+            </View>
+          )}
+          {cartItems.length > 0 && (
+            <View style={{marginTop:15}}>
+              {cartItems.map(item => (
+                <View key={item.id} style={styles.card}>
+                  <View style={styles.imageContainer}>
+                    <Image
+                      source={{ uri: item.sub_category.image }}
+                      style={styles.image}
+                    />
+                  </View>
+                  <View style={styles.detailsContainer}>
+                    <Text style={styles.subCategory}>{item.sub_category.name}</Text>
+                    <Text style={styles.category}>
+                      {item.sub_category.categories[0].name}
+                    </Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <View>
+                        <View style={styles.crossline} />
+                        <Text style={styles.modelprice}>
+                          Rs. {item.sub_category_price.actual_price}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text style={styles.modelofferprice}>
+                          Rs. {item.sub_category_price.offer_price}
+                        </Text>
+                      </View>
                     </View>
                   </View>
+                  <TouchableOpacity
+                    onPress={() => onRemove(item.sub_category_id)}
+                    style={styles.removeButton}
+                  >
+                    <FontAwesome name="times" size={20} color="lightgray" />
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                  onPress={() => onRemove(item.sub_category_id)}
-                  style={styles.removeButton}
-                >
-                  <FontAwesome name="times" size={20} color="lightgray" />
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
-        )}
-      </ScrollView>
+              ))}
+            </View>
+          )}
+        </ScrollView>
+      )}
       {(cartItems.length > 0 || cartTotal > 0) && (
         <View style={styles.totalCard}>
           <Image
@@ -146,9 +155,9 @@ const Cart = ({ navigation }) => {
           </View>
         </View>
       )}
-      <View>
+      {/* <View>
         <Footer/>
-      </View>
+      </View> */}
     </View>
   );
 };

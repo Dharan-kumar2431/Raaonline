@@ -9,70 +9,98 @@ import Verifyotp from "../createaccount/verifyotp/Verifyotp";
 import CourseDetails from "../courses/Courses";
 import Welcome from "../welcome/Welcome";
 import Home from "../home/Home";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, View, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from "../footer/Footer";
 import Cart from "../cart/Cart";
 import Profile from "../profile/Profile";
+import Myaccount from "../profile/myaccount/Myaccount";
+import Changepassword from "../profile/changepassword/Changepassword";
+import FlashMessage from 'react-native-flash-message';
+import Subcourses from "../subcourses/Subcourses";
+import Videolectures from "../videolectures/Videolectures";
+import AppLoader from "../loaders/apploader/Apploader";
 
 const stack = createNativeStackNavigator();
+const appStack = createNativeStackNavigator();
+
 
 const Navigation = () => {
   const [loginStatus, setLoginStatus] = useState(null);
   const navigation = useNavigation();
 
   useEffect(() => {
-    const checkLoginStatus = async () => {
+    setTimeout(async()=>{
       const status = await AsyncStorage.getItem("isLoggedIn");
       console.log(status);
       setLoginStatus(status);
-    };
-    checkLoginStatus();
+    },2000)
   }, []);
 
-
-
   if (loginStatus === null) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return (
+      <View style={styles.container}>
+        <AppLoader/>
+      </View>
+    );
+  } else {
+    return (
+      <>
+        <stack.Navigator
+          initialRouteName={loginStatus === "true" ? "Home" : "Welcome"}
+        >
+          <stack.Screen
+            name="Welcome"
+            component={Welcome}
+            options={{ headerShown: false }}
+          />
+          <stack.Screen
+            name="Registeration"
+            component={Registeration}
+            options={{ headerShown: false }}
+          />
+          <stack.Screen
+            name="Educationaldetails"
+            component={Educationaldetails}
+            options={{ headerShown: false }}
+          />
+          <stack.Screen
+            name="Searchcountriesandstate"
+            component={Searchcontriesandstates}
+            options={{ headerShown: false }}
+          />
+          <stack.Screen
+            name="Choosepassword"
+            component={Choosepassword}
+            options={{ headerShown: false }}
+          />
+          <stack.Screen
+            name="Verifyotp"
+            component={Verifyotp}
+            options={{ headerShown: false }}
+          />
+          <stack.Screen
+            name="Home"
+            component={Appnavagator}
+            options={{ headerShown: false }}
+          />
+          <stack.Screen
+            name="Videolectures"
+            component={Videolectures}
+            options={{ headerShown: false }}
+          />
+        </stack.Navigator>
+      </>
+    );
   }
+};
 
-  return (
+const Appnavagator = () => {
+  return(
     <>
-      <stack.Navigator
-        initialRouteName={loginStatus === "true" ? "Home" : "Welcome"}
-      >
-        <stack.Screen
-          name="Welcome"
-          component={Welcome}
-          options={{ headerShown: false }}
-        />
-        <stack.Screen
-          name="Registeration"
-          component={Registeration}
-          options={{ headerShown: false }}
-        />
-        <stack.Screen
-          name="Educationaldetails"
-          component={Educationaldetails}
-          options={{ headerShown: false }}
-        />
-        <stack.Screen
-          name="Searchcountriesandstate"
-          component={Searchcontriesandstates}
-          options={{ headerShown: false }}
-        />
-        <stack.Screen
-          name="Choosepassword"
-          component={Choosepassword}
-          options={{ headerShown: false }}
-        />
-        <stack.Screen
-          name="Verifyotp"
-          component={Verifyotp}
-          options={{ headerShown: false }}
-        />
-        <stack.Screen
-          name="Home"
+    <appStack.Navigator initialRouteName="Homes">
+    <appStack.Screen
+          name="Homes"
           component={Home}
           options={{ headerShown: false }}
         />
@@ -86,15 +114,39 @@ const Navigation = () => {
           component={Cart}
           options={{ headerShown: false }}
         />
-          <stack.Screen
+        <stack.Screen
           name="Profile"
           component={Profile}
           options={{ headerShown: false }}
         />
-      </stack.Navigator>
-      {/* {loginStatus === "true" && <Footer />} */}
+          <stack.Screen
+          name="Myaccount"
+          component={Myaccount}
+          options={{ headerShown: false }}
+        />
+          <stack.Screen
+          name="Changepassword"
+          component={Changepassword}
+          options={{ headerShown: false }}
+        />
+         <stack.Screen
+          name="Subcourses"
+          component={Subcourses}
+          options={{ headerShown: false }}
+        />
+    </appStack.Navigator>
+    <FlashMessage position="bottom" />
+    <Footer/>
     </>
-  );
-};
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default Navigation;

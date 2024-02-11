@@ -5,8 +5,8 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
-import Footer from "../footer/Footer";
 import { CommonActions } from "@react-navigation/native";
+import { Color } from "../../components/misc/Colors";
 
 
 const Profile = ({ navigation }) => {
@@ -74,6 +74,10 @@ const Profile = ({ navigation }) => {
     }
   }
 
+  const handleMyAccount = () => {
+    navigation.navigate("Myaccount",{ userDetails: userDetails })
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <View>
@@ -109,7 +113,7 @@ const Profile = ({ navigation }) => {
           <View style={styles.profilelist}>
             <View style={styles.profilelistContainer}>
               <View>
-                <TouchableOpacity style={styles.listItems}>
+                <TouchableOpacity onPress={()=> handleMyAccount()} style={styles.listItems}>
                   <Text style={styles.listitemstext}>My Account</Text>
                 </TouchableOpacity>
               </View>
@@ -131,7 +135,7 @@ const Profile = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
               <View>
-                <TouchableOpacity style={styles.listItems}>
+                <TouchableOpacity onPress={() => navigation.navigate("Changepassword")} style={styles.listItems}>
                   <Text style={styles.listitemstext}>Change Password</Text>
                 </TouchableOpacity>
               </View>
@@ -148,7 +152,7 @@ const Profile = ({ navigation }) => {
               <View>
                 <TouchableOpacity style={styles.logout} onPress={()=> handleLagout()}>
                   <View style={{ flexDirection: "row" }}>
-                    <FontAwesome name="sign-out" size={24} color="#262673" />
+                    <FontAwesome name="sign-out" size={24} color={Color.TEXTCOLOR} />
                     <Text
                       style={[
                         styles.listitemstext,
@@ -179,9 +183,6 @@ const Profile = ({ navigation }) => {
           </View>
           </View>
         </ScrollView>
-        <View>
-          <Footer/>
-        </View>
     </View>
   );
 };

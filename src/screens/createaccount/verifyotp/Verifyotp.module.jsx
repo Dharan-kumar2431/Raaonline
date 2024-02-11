@@ -1,10 +1,11 @@
 import { StyleSheet } from "react-native";
+import { Color } from "../../../components/misc/Colors";
 
 const styles = StyleSheet.create({
     registrationHeading: {
         fontSize: 25,
         fontWeight: "500",
-        color: "#00468D",
+        color: Color.SECONDARYCOLOR,
         // textAlign: "center",
         marginHorizontal:40,
         marginVertical: 20,
@@ -13,7 +14,7 @@ const styles = StyleSheet.create({
       otpsubheading:{
         fontSize:14,
         marginHorizontal:40,
-        color:"#00468D"
+        color:Color.SECONDARYCOLOR
       },
       otpContainer: {
         flexDirection: "row",
