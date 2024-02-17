@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Transparent black background
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     borderBottomColor:Color.SECONDARYCOLOR
   },
   contentSection: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
   videolecturesFooter: {
     backgroundColor: "#f8f8f8",
@@ -66,6 +66,11 @@ const styles = StyleSheet.create({
     alignItems:"center",
     justifyContent:"center",
     paddingHorizontal:15
+  },
+  loaderContainer:{
+    flex:1,
+    alignItems:"center",
+    justifyContent:"center"
   }
 });
 

@@ -6,12 +6,13 @@ import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import DataLoader from "../loaders/dataloader/Dataloader";
+import { baseUrl } from "../services/Services";
 
 const Home = ({ navigation, route }) => {
 
   const [userName, setUserName] = useState("");
   const [coursesDetails, setCoursesDetails] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);  
 
   const handleCoursePress = (name, id) => {
     navigation.navigate("Course", { courseName: name, courseId: id });
@@ -23,11 +24,12 @@ const Home = ({ navigation, route }) => {
       const username = await AsyncStorage.getItem('username');
       setUserName(username);
       try {
-        const response = await axios.get("http://3.20.9.90/api/categories", {
+        const response = await axios.get(`${baseUrl}/api/categories?status=1`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
+        console.log(response.data.data,"data")
         setCoursesDetails(response.data.data);
       } catch (error) {
         if (axios.isAxiosError(error)) {

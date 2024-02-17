@@ -10,6 +10,7 @@ import styles from "./Choosepassword.module";
 import Createaccountheader from "../header/CreatePageHeader";
 import axios from "axios";
 import { Color } from "../../../components/misc/Colors";
+import { baseUrl } from "../../services/Services";
 
 const validatePasswordDetails = (values, setIsFormValid) => {
     const errors = {};
@@ -73,7 +74,7 @@ const Choosepassword = ({ navigation }) => {
       console.log(combinedData)
       dispatch(setUserData(combinedData))
       try {
-        const response = await axios.post("http://3.20.9.90/api/users/register",{
+        const response = await axios.post(`${baseUrl}/api/users/register`,{
             email: combinedData.email,
             first_name: combinedData.first_name,
             last_name: combinedData.last_name,
@@ -91,7 +92,7 @@ const Choosepassword = ({ navigation }) => {
             // navigation.navigate("Verifyotp");
 
             try {
-                const response = await axios.post("http://3.20.9.90/api/users/sendOtp",{
+                const response = await axios.post(`${baseUrl}/api/users/sendOtp`,{
                     userName: combinedData.email,
                     otpVia:"email"
                 })

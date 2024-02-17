@@ -15,6 +15,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { showMessage } from "react-native-flash-message";
 import { Color } from "../../../components/misc/Colors";
+import { baseUrl } from "../../services/Services";
 
 const changePasswordValidation = (values) => {
   const errors = {};
@@ -66,7 +67,7 @@ const Changepassword = ({ navigation }) => {
       console.log(values);
       try {
         const response = await axios.post(
-          "http://3.20.9.90/api/users/changePassword",
+          `${baseUrl}/api/users/changePassword`,
           {
             currentPassword: values.currentPassword,
             newPassword: values.newPassword,

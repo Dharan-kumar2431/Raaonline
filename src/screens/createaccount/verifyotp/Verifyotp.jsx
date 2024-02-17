@@ -4,6 +4,7 @@ import Createaccountheader from "../header/CreatePageHeader";
 import styles from "./Verifyotp.module";
 import axios from "axios";
 import { Color } from "../../../components/misc/Colors";
+import { baseUrl } from "../../services/Services";
 
 const Verifyotp = ({ navigation, route }) => {
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -32,7 +33,7 @@ const Verifyotp = ({ navigation, route }) => {
     console.log("Submitted OTP:", enteredOtp);
 
     try{
-        const response = await axios.post("http://3.20.9.90/api/users/verifyOtp", {
+        const response = await axios.post(`${baseUrl}/api/users/verifyOtp`, {
             otp:enteredOtp,
             userName:sendOtpTOEmail,
             otp_for : "login",

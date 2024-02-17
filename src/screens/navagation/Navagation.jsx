@@ -9,7 +9,7 @@ import Verifyotp from "../createaccount/verifyotp/Verifyotp";
 import CourseDetails from "../courses/Courses";
 import Welcome from "../welcome/Welcome";
 import Home from "../home/Home";
-import { ActivityIndicator, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Footer from "../footer/Footer";
 import Cart from "../cart/Cart";
@@ -20,6 +20,11 @@ import FlashMessage from 'react-native-flash-message';
 import Subcourses from "../subcourses/Subcourses";
 import Videolectures from "../videolectures/Videolectures";
 import AppLoader from "../loaders/apploader/Apploader";
+import Features from "../../featuresdescription/Features";
+import Myfavourites from "../profile/myfavourites/Myfavourites";
+import Aboutus from "../profile/aboutus/Aboutus";
+import Contactus from "../profile/contactus/Contactus";
+import Privacypolicy from "../profile/privicypolicy/Privacypolicy";
 
 const stack = createNativeStackNavigator();
 const appStack = createNativeStackNavigator();
@@ -87,6 +92,31 @@ const Navigation = () => {
           <stack.Screen
             name="Videolectures"
             component={Videolectures}
+            options={{ headerShown: false }}
+          />
+          <stack.Screen
+            name="Features"
+            component={Features}
+            options={{ headerShown: false }}
+          />
+          <stack.Screen
+            name="Favourites"
+            component={Myfavourites}
+            options={{ headerShown: false }}
+          />
+          <stack.Screen
+            name="Aboutus"
+            component={Aboutus}
+            options={{ headerShown: false }}
+          />
+          <stack.Screen
+            name="Contactus"
+            component={Contactus}
+            options={{ headerShown: false }}
+          />
+          <stack.Screen
+            name="Privacypolicy"
+            component={Privacypolicy}
             options={{ headerShown: false }}
           />
         </stack.Navigator>

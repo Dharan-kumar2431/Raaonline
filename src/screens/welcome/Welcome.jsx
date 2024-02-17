@@ -22,6 +22,7 @@ import { loginSuccess } from "../../store/loginStatusSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { Color } from "../../components/misc/Colors";
+import { baseUrl } from "../services/Services";
 
 const handleLoginValidation = (values, setIsFormValid) => {
   const errors = {};
@@ -61,6 +62,7 @@ const Welcome = ({ navigation }) => {
       password: "",
     },
     onSubmit: async (values) => {
+      navigation.navigate("Home");
       try {
         const combainAdditionalDetails = {
           ...values,
@@ -72,7 +74,7 @@ const Welcome = ({ navigation }) => {
         console.log(combainAdditionalDetails, "all details");
 
         const response = await axios.post(
-          "http://3.20.9.90/api/users/login",
+          `${baseUrl}/api/users/login`,
           combainAdditionalDetails
         );
         console.log(response.data, "login response");
@@ -179,7 +181,7 @@ const Welcome = ({ navigation }) => {
 
               <TouchableOpacity onPress={() => alert("Forgot password")}>
                 <Text style={styles.forgotPassword}>Forgot Password?</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> 
 
               <TouchableOpacity
                 style={[

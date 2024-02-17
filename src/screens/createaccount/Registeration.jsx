@@ -21,6 +21,7 @@ import { setUserData } from "../../store/userSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { Color } from "../../components/misc/Colors";
+import { baseUrl } from "../services/Services";
 const { width, height } = Dimensions.get("window");
 
 const validateRegistration = (values, setIsFormValid) => {
@@ -164,7 +165,7 @@ const Registeration = ({ navigation }) => {
           phone_number: values.phone_number
         }
         console.log('params',params)
-        const response = await axios.post("http://3.20.9.90/api/users/checkUsername",params)
+        const response = await axios.post(`${baseUrl}/api/users/checkUsername`,params)
 
         console.log(response.data,"==> use check response")
 

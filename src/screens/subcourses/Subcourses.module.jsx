@@ -103,7 +103,13 @@ const styles = StyleSheet.create({
     flex:1,
     alignItems:"center",
     justifyContent:"center"
-  }
+  },
+  searchbar: {
+    position: "absolute",
+    width:"100%",
+    top:60,
+    zIndex:1,
+  },
 });
 
 export default styles;

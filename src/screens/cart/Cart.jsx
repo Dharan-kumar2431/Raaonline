@@ -7,9 +7,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
 import Footer from "../footer/Footer";
 import DataLoader from "../loaders/dataloader/Dataloader";
+import { baseUrl } from "../services/Services";
 
 const Cart = ({ navigation }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState({ subCategories: [], courses: [] });
   const [cartTotal, setCartTotal] = useState(0);
   const [loading, setLoading] = useState(true); 
 
@@ -20,12 +21,19 @@ const Cart = ({ navigation }) => {
   const fetchData = async () => {
     const token = await AsyncStorage.getItem("token");
     try {
-      const response = await axios.get("http://3.20.9.90/api/carts", {
+      const response = await axios.get(`${baseUrl}/api/carts`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setCartItems(response.data.data.items);
+      console.log(response.data.data,"cart items")
+      
+      // Filter out subcategories and courses separately
+      const subCategories = response.data.data.items.filter(item => item.sub_category !== null);
+      const courses = response.data.data.items.filter(item => item.course !== null);
+      
+      // Update state for both subcategories and courses
+      setCartItems({ subCategories, courses });
       setCartTotal(response.data.data.cartTotal);
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -43,7 +51,7 @@ const Cart = ({ navigation }) => {
     const token = await AsyncStorage.getItem("token");
     console.log(itemId);
     try {
-      await axios.delete("http://3.20.9.90/api/carts", {
+      await axios.delete(`${baseUrl}/api/carts`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -51,9 +59,30 @@ const Cart = ({ navigation }) => {
           sub_category_id: itemId,
         },
       });
-      setCartItems(prevCartItems =>
-        prevCartItems.filter(item => item.sub_category_id !== itemId)
-      );
+      fetchData();
+      showToast("Item removed successfully");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.response.data);
+        alert(error.response.data.message);
+      } else {
+        console.error(error);
+      }
+    }
+  };
+
+  const onRemoveCourse = async (itemId) => {
+    const token = await AsyncStorage.getItem("token");
+    console.log(itemId);
+    try {
+      await axios.delete(`${baseUrl}/api/carts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          course_id: itemId,
+        },
+      });
       fetchData();
       showToast("Item removed successfully");
     } catch (error) {
@@ -81,14 +110,14 @@ const Cart = ({ navigation }) => {
         </View>
       ) : (
         <ScrollView>
-          {cartItems.length === 0 && (
+          {cartItems.subCategories.length === 0 && cartItems.courses.length === 0 && (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
               <Text style={{ fontSize: 18 }}>No items in your cart</Text>
             </View>
           )}
-          {cartItems.length > 0 && (
+          {cartItems.subCategories.length > 0 && (
             <View style={{marginTop:15}}>
-              {cartItems.map(item => (
+              {cartItems.subCategories.map(item => (
                 <View key={item.id} style={styles.card}>
                   <View style={styles.imageContainer}>
                     <Image
@@ -125,9 +154,48 @@ const Cart = ({ navigation }) => {
               ))}
             </View>
           )}
+          {cartItems.courses.length > 0 && (
+            <View style={{marginTop:15}}>
+              {cartItems.courses.map(item => (
+                <View key={item.id} style={styles.card}>
+                  <View style={styles.imageContainer}>
+                    <Image
+                      source={{ uri: item.course.image }}
+                      style={styles.image}
+                    />
+                  </View>
+                  <View style={styles.detailsContainer}>
+                    <Text style={styles.subCategory}>{item.course.name}</Text>
+                    <Text style={styles.category}>
+                      {item.course.sub_categories[0].name}
+                    </Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <View>
+                        <View style={styles.crossline} />
+                        <Text style={styles.modelprice}>
+                          Rs. {item.course_price.actual_price}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text style={styles.modelofferprice}>
+                          Rs. {item.course_price.offer_price}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => onRemoveCourse(item.course_id)}
+                    style={styles.removeButton}
+                  >
+                    <FontAwesome name="times" size={20} color="lightgray" />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          )}
         </ScrollView>
       )}
-      {(cartItems.length > 0 || cartTotal > 0) && (
+      {(cartItems.subCategories.length > 0 || cartItems.courses.length > 0 || cartTotal > 0) && (
         <View style={styles.totalCard}>
           <Image
             source={require("../../../assets/cartcardbgimg.png")}

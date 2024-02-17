@@ -19,47 +19,52 @@ import Createaccountheader from "../createaccount/header/CreatePageHeader";
 import Footer from "../footer/Footer";
 import DataLoader from "../loaders/dataloader/Dataloader";
 import { Color } from "../../components/misc/Colors";
+import SearchBarComponent from "../searchbar/Searchbar";
+import { baseUrl } from "../services/Services";
 
 const CourseDetails = ({ navigation, route }) => {
   const [subCoursesDetails, setSubCoursesDetails] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [isContinueEnabled, setIsContinueEnabled] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); 
-
+  const [isLoading, setIsLoading] = useState(true);
   const courseHeading = route.params.courseName;
   const courseid = route.params.courseId;
-  console.log(courseid,"id<==================================")
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      const token = await AsyncStorage.getItem("token");
-      console.log("working", token);
-      try {
-        const response = await axios.get(`http://3.20.9.90/api/subCategories?filterKey=category_id&filterValue=${courseid}`, {
+    fetchCourses();
+  }, []);
+
+  const fetchCourses = async () => {
+    const token = await AsyncStorage.getItem("token");
+    console.log("working", token);
+    try {
+      const response = await axios.get(
+        `${baseUrl}/api/subCategories?filterKey=category_id&filterValue=${courseid}&status=1`,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        });
-        console.log(response.data.data, "subcourses details");
-        setSubCoursesDetails(response.data.data);
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 1000);
-      } catch (error) {
-        setIsLoading(false); 
-        if (axios.isAxiosError(error)) {
-          console.error(error.response.data);
-          alert(error.response.data.message);
-        } else {
-          console.error(error);
         }
+      );
+      console.log(response.data.data, "subcourses details");
+      setSubCoursesDetails(response.data.data);
+      setFilteredCourses(response.data.data);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
+    } catch (error) {
+      setIsLoading(false);
+      if (axios.isAxiosError(error)) {
+        console.error(error.response.data);
+        alert(error.response.data.message);
+      } else {
+        console.error(error);
       }
-    };
-
-    fetchCourses();
-  }, []);
+    }
+  };
 
   const openModal = (course) => {
     setSelectedCourse(course);
@@ -94,7 +99,7 @@ const CourseDetails = ({ navigation, route }) => {
 
         try {
           const response = await axios.post(
-            "http://3.20.9.90/api/carts",
+            `${baseUrl}/api/carts`,
             {
               sub_category_id: selectedPrice.sub_category_id,
               sub_category_price_id: selectedPrice.id,
@@ -136,37 +141,112 @@ const CourseDetails = ({ navigation, route }) => {
   };
 
   const handleCoursePress = (name, id) => {
-    navigation.navigate("Subcourses",{ courseName: name , courseId: id});
-  }
+    navigation.navigate("Subcourses", { courseName: name, courseId: id });
+  };
+
+  const handleSearch = (searchText) => {
+    const filtered = subCoursesDetails.filter((course) =>
+      course.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredCourses(filtered);
+  };
+
+  const handleFeaturespress = (couesesDetails) => {
+    console.log(couesesDetails, "$$$Details");
+    navigation.navigate("Features", { data: couesesDetails });
+  };
+
+  const handleFavoritepress = async (coursesdeatils) => {
+    const token = await AsyncStorage.getItem("token");
+    console.log(coursesdeatils, "fav courses details");
+    console.log(coursesdeatils.is_in_favorite, "fav courses details");
+    console.log(
+      coursesdeatils.sub_category_prices[0].sub_category_id,
+      "id===>>>>"
+    );
+    const id = coursesdeatils.sub_category_prices[0].sub_category_id;
+
+    try {
+      if (coursesdeatils.is_in_favorite) {
+        const response = await axios.delete(
+          `${baseUrl}/api/favorites/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response.data);
+        fetchCourses()
+      } else {
+        const response = await axios.post(
+          `${baseUrl}/api/favorites`,
+          {
+            sub_category_id: id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(response.data);
+        fetchCourses()
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.response.data);
+        alert(error.response.data.message);
+        setIsContinueEnabled(false);
+      } else {
+        console.error(error);
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View>
         <Createaccountheader navigation={navigation} name={"Go Back"} />
+        <View style={styles.searchbar}>
+          <SearchBarComponent onSearch={handleSearch} />
+        </View>
       </View>
       {isLoading ? (
         <View style={styles.loaderContainer}>
-          <DataLoader/>
+          <DataLoader />
         </View>
       ) : (
         <ScrollView style={styles.content}>
           <Text style={styles.heading}>{courseHeading}</Text>
 
           <View style={styles.cardRow}>
-            {subCoursesDetails.map((course) => (
+            {filteredCourses.map((course) => (
               <View key={course.id} style={styles.card}>
                 <View style={{ flex: 1 }}>
-                  <TouchableOpacity onPress={() => handleCoursePress(course.name, course.id) }>
+                  <TouchableOpacity
+                    onPress={() => handleCoursePress(course.name, course.id)}
+                  >
                     <Image
                       source={{ uri: course.image }}
                       style={styles.cardImage}
                     />
                   </TouchableOpacity>
                   <View style={styles.iconContainer}>
-                    <FontAwesome name="heart-o" size={20} color="white" />
+                    <TouchableOpacity
+                      onPress={() => handleFavoritepress(course)}
+                    >
+                      <FontAwesome
+                        name={course.is_in_favorite ? "heart" : "heart-o"}
+                        size={20}
+                        color={course.is_in_favorite ? "red" : "white"}
+                      />
+                    </TouchableOpacity>
                   </View>
                   <View style={styles.iconArrowContainer}>
-                    <TouchableOpacity onPress={() => handleCoursePress(course.name, course.id) }>
+                    <TouchableOpacity
+                      onPress={() => handleCoursePress(course.name, course.id)}
+                    >
                       <FontAwesome
                         style={{}}
                         name="angle-double-right"
@@ -182,11 +262,14 @@ const CourseDetails = ({ navigation, route }) => {
                     <Text style={styles.cardTitle}>{course.name}</Text>
                   </View>
                   <View style={styles.dropdownWrapper}>
-                    <Dropdown
+                    {/* <Dropdown
                       style={{ backgroundColor: "#E7F6FF", paddingLeft: 5 }}
                       placeholder="Course Details"
-                      placeholderStyle={{ color: Color.SECONDARYCOLOR, fontSize: 14 }}
-                      data={course.features
+                      placeholderStyle={{
+                        color: Color.SECONDARYCOLOR,
+                        fontSize: 14,
+                      }}
+                      data={course?.features
                         .split("\r\n")
                         .map((feature, index) => ({
                           label: feature,
@@ -206,7 +289,7 @@ const CourseDetails = ({ navigation, route }) => {
                         marginTop: -45,
                         paddingTop: 30,
                       }}
-                    />
+                    /> */}
                   </View>
 
                   <Text style={styles.actualprice}>
@@ -238,7 +321,10 @@ const CourseDetails = ({ navigation, route }) => {
                       <Text style={styles.buttonText}>Add to Cart</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.featuresButton}>
+                    <TouchableOpacity
+                      style={styles.featuresButton}
+                      onPress={() => handleFeaturespress(course)}
+                    >
                       <Text style={styles.featurebuttonText}>Features</Text>
                     </TouchableOpacity>
                   </View>
@@ -252,7 +338,7 @@ const CourseDetails = ({ navigation, route }) => {
         animationType="slide"
         transparent={true}
         visible={isModalVisible}
-        onRequestClose={closeModal}  
+        onRequestClose={closeModal}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -270,7 +356,11 @@ const CourseDetails = ({ navigation, route }) => {
                   }}
                 >
                   <View
-                    style={{ flex: 1, height: 1, backgroundColor: "lightgray" }}
+                    style={{
+                      flex: 1,
+                      height: 1,
+                      backgroundColor: "lightgray",
+                    }}
                   />
                   <View>
                     <Text
@@ -284,7 +374,11 @@ const CourseDetails = ({ navigation, route }) => {
                     </Text>
                   </View>
                   <View
-                    style={{ flex: 1, height: 1, backgroundColor: "lightgray" }}
+                    style={{
+                      flex: 1,
+                      height: 1,
+                      backgroundColor: "lightgray",
+                    }}
                   />
                 </View>
                 {selectedCourse.sub_category_prices

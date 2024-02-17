@@ -7,6 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
 import { CommonActions } from "@react-navigation/native";
 import { Color } from "../../components/misc/Colors";
+import { baseUrl } from "../services/Services";
 
 
 const Profile = ({ navigation }) => {
@@ -16,7 +17,7 @@ const Profile = ({ navigation }) => {
     (async () => {
       const token = await AsyncStorage.getItem("token");
       try {
-        const userData = await axios.get("http://3.20.9.90/api/users/getMe", {
+        const userData = await axios.get(`${baseUrl}/api/users/getMe`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -36,11 +37,18 @@ const Profile = ({ navigation }) => {
   }, []);
 
   const handleLagout = async() => {
+    // await AsyncStorage.setItem('isLoggedIn', 'false');
+    //   navigation.dispatch(
+    //     CommonActions.reset({
+    //       index: 0,
+    //       routes: [{ name: 'Welcome' }],
+    //     })
+    //   );
     try{
       const token = await AsyncStorage.getItem("token");
       const deviceToken = await AsyncStorage.getItem('deviceTocken');
       console.log(deviceToken)
-      const response = await axios.post("http://3.20.9.90/api/users/logout",
+      const response = await axios.post(`${baseUrl}/api/users/logout`,
         {
           user_id:userDetails.id,
           device_token:deviceToken
@@ -118,7 +126,7 @@ const Profile = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
               <View>
-                <TouchableOpacity style={styles.listItems}>
+                <TouchableOpacity style={styles.listItems} onPress={() => navigation.navigate("Favourites")}>
                   <Text style={styles.listitemstext}>My Favourites</Text>
                 </TouchableOpacity>
               </View>
@@ -128,7 +136,7 @@ const Profile = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
               <View>
-                <TouchableOpacity style={styles.listItems}>
+                <TouchableOpacity style={styles.listItems} onPress={() => navigation.navigate("Contactus")}>
                   <Text style={styles.listitemstext}>
                     Contact Us for Subscription
                   </Text>
@@ -145,7 +153,7 @@ const Profile = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
               <View>
-                <TouchableOpacity style={styles.listItems}>
+                <TouchableOpacity style={styles.listItems} onPress={() => navigation.navigate("Aboutus")}>
                   <Text style={styles.listitemstext}>About us</Text>
                 </TouchableOpacity>
               </View>
@@ -166,7 +174,7 @@ const Profile = ({ navigation }) => {
               </View>
 
               <View style={{alignSelf:"flex-start",marginBottom:10}}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("Privacypolicy")}>
                   <Text style={[styles.listitemstext,{marginLeft:5,fontWeight:"bold",fontSize:16}]}>Privacy Policy</Text>
                 </TouchableOpacity>
               </View>
